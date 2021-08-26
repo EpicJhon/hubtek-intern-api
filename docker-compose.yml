@@ -1,0 +1,20 @@
+version: '3.4'
+services:
+  redis:
+    image: redis:6-alpine
+  api:
+    image: hubtek-intern-api:latest
+    build:
+      context: ./api
+    restart: always
+    volumes:
+      - "${DB_STORAGE}:/home/worker/db:delegated"
+    environment:
+      TZ: ${TimeZone}
+      FIRST_USER: ${FIRST_USER}
+      FIRST_USER_PWD: ${FIRST_USER_PWD}
+      ACCESS_TOKEN_EXPIRE_MINUTES: ${ACCESS_TOKEN_EXPIRE_MINUTES}
+      CELERY_BROKER: ${CELERY_BROKER}
+      CELERY_BACKEND: ${CELERY_BACKEND}
+    ports:
+      - "9050:9050"
